@@ -11,7 +11,7 @@ Package.describe({
 });
 
 const basePackages = {
-  server: [ 'c0r3y8:octopus', 'ecmascript', 'ejson', 'meteor' ]
+  server: [ 'c0r3y8:octopus@0.1.0', 'ecmascript', 'ejson', 'meteor' ]
 };
 
 const testPackages = [
@@ -53,7 +53,6 @@ Package.onTest(function (api) {
 
   api.use(testPackages);
 
-  api.use('c0r3y8:octopus');
   api.use('c0r3y8:octopus-cache');
 
   api.addFiles('server/cache-tests.js', 'server');
