@@ -1,6 +1,6 @@
 Package.describe({
   name: 'c0r3y8:octopus-cache',
-  version: '0.2.0',
+  version: '0.2.1',
   // Brief, one-line summary of the package.
   summary: 'Cache module for Octopus',
   // URL to the Git repository containing the source code for this package.
@@ -11,7 +11,7 @@ Package.describe({
 });
 
 const basePackages = {
-  server: [ 'c0r3y8:octopus@0.2.0', 'ecmascript', 'ejson', 'meteor' ]
+  server: [ 'c0r3y8:octopus@0.2.1', 'ecmascript', 'ejson', 'meteor' ]
 };
 
 const testPackages = [
