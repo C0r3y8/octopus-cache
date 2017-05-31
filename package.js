@@ -11,7 +11,7 @@ Package.describe({
 });
 
 const basePackages = {
-  server: [ 'c0r3y8:octopus', 'ecmascript', 'ejson', 'meteor' ]
+  server: [ 'c0r3y8:octopus@0.2.0', 'ecmascript', 'ejson', 'meteor' ]
 };
 
 const testPackages = [
