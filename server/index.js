@@ -9,7 +9,7 @@ import {
 import { defaultBuildKey } from './utils';
 
 checkNpmVersions({
-  'node-cache': '4.x'
+  'lru-cache': '4.x'
 }, 'c0r3y8:octopus-cache');
 
 export {

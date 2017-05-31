@@ -1,5 +1,7 @@
+/* eslint-disable import/no-unresolved */
 import assert from 'assert';
-import NodeCache from 'node-cache';
+import LRU from 'lru-cache';
+/* eslint-enable */
 
 import {
   jsperfFind,
@@ -11,38 +13,38 @@ export default class Cache {
   /**
    * @constructor
    * @param {object} [options={}]
-   * @param {number} [options.checkperiod=600]
    * @param {array} [options.collections=[]]
-   * @param {boolean} [options.errorOnMissing=false]
-   * @param {number} [options.stdTTL=0]
-   * @param {boolean} [options.useClones=true]
+   * @param {number} [options.max=1024]
+   * @param {number} [options.maxAge=86400000] 1000 * 60 * 60 * 24
    */
   constructor(options = {}) {
     assert(options, 'You must provide `options`');
 
     this.options = {
-      checkperiod: 600,
       collections: [],
-      errorOnMissing: false,
-      stdTTL: 0,
-      useClones: true,
+      max: 1024,
+      maxAge: 86400000,
       ...options
     };
-    this.cache = new NodeCache(this.options);
+    this.cache = new LRU(this.options);
     this.queue = {};
 
-    // node-cache API
-    this.close = this.cache.close;
-    this.del = this.cache.del;
-    this.flushAll = this.cache.flushAll;
-    this.get = this.cache.get;
-    this.getStats = this.cache.getStats;
-    this.getTtl = this.cache.getTtl;
-    this.keys = this.cache.keys;
-    this.mget = this.cache.mget;
-    this.on = this.cache.on;
-    this.set = this.cache.set;
-    this.ttl = this.cache.ttl;
+    // lru-cache API
+    this.del = this.cache.del.bind(this.cache);
+    this.dump = this.cache.dump.bind(this.cache);
+    this.forEach = this.cache.forEach.bind(this.cache);
+    this.get = this.cache.get.bind(this.cache);
+    this.has = this.cache.has.bind(this.cache);
+    this.itemCount = this.cache.itemCount;
+    this.keys = this.cache.keys.bind(this.cache);
+    this.length = this.cache.length;
+    this.load = this.cache.load.bind(this.cache);
+    this.peek = this.cache.peek.bind(this.cache);
+    this.prune = this.cache.prune.bind(this.cache);
+    this.reset = this.cache.reset.bind(this.cache);
+    this.rforEach = this.cache.rforEach.bind(this.cache);
+    this.set = this.cache.set.bind(this.cache);
+    this.values = this.cache.values.bind(this.cache);
 
     // jsPerf
     this.options.collections.jsperfForEach = jsperfForEach;
@@ -94,6 +96,36 @@ export default class Cache {
   }
 
   /**
+   * @summary Delete multiple keys
+   * @locus Server
+   * @memberof Cache
+   * @method mdel
+   * @instance
+   * @param {array.<String>} keys
+   */
+  mdel(keys) {
+    // eslint-disable-next-line no-param-reassign
+    keys.jsperfForEach = jsperfForEach;
+
+    keys.jsperfForEach((key) => {
+      this.del(key);
+    });
+  }
+
+  /**
+   * @summary Gets multiple keys
+   * @locus Server
+   * @memberof Cache
+   * @method mget
+   * @instance
+   * @param {array.<String>} keys
+   * @return {array}
+   */
+  mget(keys) {
+    return keys.map(key => this.get(key));
+  }
+
+  /**
    * @summary Process all queue callback
    * @locus Server
    * @memberof Cache
@@ -121,7 +153,7 @@ export default class Cache {
         head: dynamicHead,
         status: statusCode,
         url: res.getHeader('Location')
-      }, route.ttl);
+      }, route.maxAge);
 
       delete this.queue[ current ];
     }

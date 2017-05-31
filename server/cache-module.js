@@ -52,7 +52,7 @@ export const cachePresenceForMiddleware = (buildKey = defaultBuildKey) =>
 /* eslint-enable */
 
 export const enableCache = (
-  ttl = 1000 * 60 * 60 * 24,
+  maxAge = 86400000,
   buildKey = defaultBuildKey
 ) =>
   function enablingCacheMiddleware(req) {
@@ -60,7 +60,7 @@ export const enableCache = (
 
     this.cache.addInQueue({
       key: buildKey(method, originalUrl, this.params),
-      ttl,
+      maxAge,
       url: originalUrl
     });
 
@@ -72,11 +72,9 @@ export class CacheModule {
   /**
    * @constructor
    * @param {object} [options={}]
-   * @param {number} [options.checkperiod=600]
    * @param {array} [options.collections=[]]
-   * @param {boolean} [options.errorOnMissing=false]
-   * @param {number} [options.stdTTL=0]
-   * @param {boolean} [options.useClones=true]
+   * @param {number} [options.max=1024]
+   * @param {number} [options.maxAge=86400000] 1000 * 60 * 60 * 24
    */
   constructor(options) {
     this.cache = new Cache(options);
