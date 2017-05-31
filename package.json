@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "start": "meteor run",
-    "test": "spacejam test-packages ./ --driver-package=practicalmeteor:mocha-console-runner"
+    "test": "spacejam test-packages ./src --driver-package=practicalmeteor:mocha-console-runner"
   },
   "dependencies": {
     "babel-plugin-dev-expression": "^0.2.1",
@@ -20,7 +20,8 @@
     "babel-preset-meteor": "^6.14.0",
     "babel-preset-react": "^6.22.0",
     "babel-preset-stage-0": "^6.22.0",
-    "babel-runtime": "^6.23.0"
+    "babel-runtime": "^6.23.0",
+    "lru-cache": "^4.0.2"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",
